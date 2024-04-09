@@ -911,7 +911,8 @@ public class PubSubIntegrationTest extends AbstractSmackIntegrationTest {
 
             // Retrieve items and assert that the item that was just deleted is no longer among them.
             final List<Item> items = node.getItems();
-            assertFalse(items.stream().anyMatch(item -> item.getId().equals(needle)));
+            assertFalse(items.stream().anyMatch(item -> item.getId().equals(needle)),
+                "After deleting item '" + needle + "' it was expected that this item no longer was returned in a request for items of node '" + nodename + "' (but it was).");
         } finally {
             pubSubManagerOne.deleteNode(nodename);
         }
