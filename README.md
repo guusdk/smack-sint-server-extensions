@@ -4,7 +4,7 @@ Additional tests that are server-oriented to add to those in [Smack's Integratio
 
 ## Run tests
 
-These tests require **Java 8 or later** to execute.
+These tests require **Java 11 or later** to execute.
 
 The tests from this project can be executed using any of the following methods.
 
