@@ -91,3 +91,8 @@ jobs:
           -DlogDir=logs \
           -jar $JARFILE
         shell: bash
+      - name: Expose XMPP debug logs
+        uses: actions/upload-artifact@v4
+        with:
+          name: XMPP debug logs
+          path: logs/*
