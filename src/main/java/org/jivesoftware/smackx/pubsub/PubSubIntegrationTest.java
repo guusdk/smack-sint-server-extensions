@@ -1,6 +1,6 @@
 /**
  *
- * Copyright 2015-2020 Florian Schmaus, Guus der Kinderen, Paul Schaub
+ * Copyright 2015-2024 Florian Schmaus, Guus der Kinderen, Paul Schaub
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -40,6 +40,8 @@ import org.jivesoftware.smack.packet.StandardExtensionElement;
 import org.jivesoftware.smack.packet.Stanza;
 import org.jivesoftware.smack.packet.StanzaError;
 import org.jivesoftware.smack.packet.XmlEnvironment;
+import org.jivesoftware.smackx.disco.ServiceDiscoveryManager;
+import org.jivesoftware.smackx.disco.packet.DiscoverInfo;
 import org.jivesoftware.smackx.geoloc.packet.GeoLocation;
 import org.jivesoftware.smackx.pubsub.form.ConfigureForm;
 import org.jivesoftware.smackx.pubsub.form.FillableConfigureForm;
@@ -867,6 +869,50 @@ public class PubSubIntegrationTest extends AbstractSmackIntegrationTest {
             });
             assertEquals(StanzaError.Type.MODIFY, e.getStanzaError().getType());
             assertNotNull(e.getStanzaError().getExtension("item-forbidden", "http://jabber.org/protocol/pubsub#errors"));
+        } finally {
+            pubSubManagerOne.deleteNode(nodename);
+        }
+    }
+
+    /**
+     * Asserts that an item can be deleted from a node.
+     *
+     * <p>From XEP-0060 § 7.2.3.6:</p>
+     * <blockquote>
+     * To delete an item, the publisher sends a retract request as shown in the following examples. The <retract/>
+     * element MUST possess a 'node' attribute (...)
+     * </blockquote>
+     *
+     * @throws NoResponseException if there was no response from the remote entity.
+     * @throws XMPPErrorException if there was an XMPP error returned.
+     * @throws NotConnectedException if the XMPP connection is not connected.
+     * @throws InterruptedException if the calling thread was interrupted.
+     * @throws TestNotPossibleException When the server does not announce the http://jabber.org/protocol/pubsub#delete-items feature.
+     * @see <a href="https://xmpp.org/extensions/xep-0060.html#publisher-delete">
+     *     7.2 Delete an Item from a Node</a>
+     */
+    @SmackIntegrationTest
+    public void deleteItemTest() throws NoResponseException, XMPPErrorException, NotConnectedException, InterruptedException, TestNotPossibleException
+    {
+        final DiscoverInfo discoveredInfo = ServiceDiscoveryManager.getInstanceFor(conOne).discoverInfo(pubSubManagerOne.getServiceJid());
+        if (!discoveredInfo.containsFeature("http://jabber.org/protocol/pubsub#delete-items")) {
+            throw new TestNotPossibleException("Deleting a pubsub node is optional functionality that does not seem to be supported by this server. It does not announce the 'http://jabber.org/protocol/pubsub#delete-items' feature.");
+        }
+
+        final String nodename = "sinttest-delete-item-nodename-" + testRunId;
+        final String needle = "test-item-" + Math.random();
+        LeafNode node = pubSubManagerOne.createNode(nodename);
+        try {
+            // Publish a new item.
+            node.publish(new PayloadItem<>(needle, GeoLocation.builder().setDescription("This item was created during an automated test.").build()));
+
+            // Retract the item.
+            node.deleteItem(needle);
+
+            // Retrieve items and assert that the item that was just deleted is no longer among them.
+            final List<Item> items = node.getItems();
+            assertFalse(items.stream().anyMatch(item -> item.getId().equals(needle)),
+                "After deleting item '" + needle + "' it was expected that this item no longer was returned in a request for items of node '" + nodename + "' (but it was).");
         } finally {
             pubSubManagerOne.deleteNode(nodename);
         }
