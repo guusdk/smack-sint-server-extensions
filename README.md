@@ -41,3 +41,19 @@ This is the most basic configuration that you can use to run tests against a loc
 ### From source code, on the command line
 
 To run the tests directly from the source code, edit the pom.xml to match your settings, then run `mvn exec:java`
+
+### Log XMPP traffic in files
+
+A Smack Debugger implementation is included, that, once configured, will store debug logs (containing XMPP traffic) in distinct files, per test that's executed.
+
+To enable this logging, this system property is to be added to the invocation of these tests:
+
+```bash
+-Dsinttest.debugger="org.igniterealtime.smack.inttest.util.FileLoggerFactory"
+```
+
+An additional system property can be used to identify the directory in which the logs are to be stored. This directory will be created, if it doesn't already exist.
+
+```bash
+-DlogDir=target/logs
+```
