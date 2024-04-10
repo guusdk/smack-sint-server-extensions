@@ -87,5 +87,6 @@ jobs:
           -Dsinttest.enabledConnections=tcp \
           -Dsinttest.dnsResolver=javax \
           -Dsinttest.disabledTests="EntityCapsTest,SoftwareInfoIntegrationTest,XmppConnectionIntegrationTest,StreamManagementTest,WaitForClosingStreamElementTest,IoTControlIntegrationTest,ModularXmppClientToServerConnectionLowLevelIntegrationTest" \
+          -DlogDir=logs \
           -jar $JARFILE
         shell: bash
