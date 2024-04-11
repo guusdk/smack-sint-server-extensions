@@ -17,13 +17,13 @@ When executing the JAR file, the tests are run.
 
 To configure the tests, the [framework properties](https://download.igniterealtime.org/smack/dailybuilds/sinttest-javadoc/org/igniterealtime/smack/inttest/package-summary.html) can be provided as standard Java system properties.
 
-For example, to run PubSub-specific tests against a service named `example.org`, using an admin account to create test users, with security disabled, this command can be invoked:
+For example, to run all tests except for those that relate to the XEP-0045 "Multi-User Chat" specification against a service named `example.org`, using an admin account to create test users, with security disabled, this command can be invoked:
 
 ```bash
 java -Dsinttest.adminAccountUsername=admin \
      -Dsinttest.adminAccountPassword=admin \
      -Dsinttest.securityMode=disabled \
-     -Dsinttest.enabledTests=PubSubIntegrationTest` \
+     -Dsinttest.disabledSpecifications=XEP-0045 \
      smack-sint-server-extensions-1.0.0-jar-with-dependencies.jar
 ```
 
