@@ -50,7 +50,7 @@ public class FileLogger extends AbstractDebugger
         if (testUnderExecution != null) {
             filename = testUnderExecution.toString();
         } else {
-            filename = "output";
+            filename = "test_suite_orchestration";
         }
         filename += ".log";
 
