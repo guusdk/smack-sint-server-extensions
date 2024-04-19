@@ -1,5 +1,5 @@
 /**
- * Copyright 2023 Ignite Realtime Foundation
+ * Copyright 2023-2024 Ignite Realtime Foundation
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -68,11 +68,11 @@ public class ResourceBindingIntegrationTest extends AbstractSmackLowLevelIntegra
      * @see <a href="https://igniterealtime.atlassian.net/jira/software/c/projects/OF/issues/OF-2565">issue OF-2565</a>
      */
     @SmackIntegrationTest
-    public void testSendStanzaBeforeLoginToSomeoneElse() throws XMPPException, SmackException, IOException, InterruptedException
+    public void testSendStanzaBeforeLoginToSomeoneElse(UnconnectedConnectionSource unconnectedConnectionSource) throws XMPPException, SmackException, IOException, InterruptedException
     {
         final String nonExistentUserString = StringUtils.insecureRandomString(24);
 
-        final AbstractXMPPConnection connection = getUnconnectedConnection();
+        final AbstractXMPPConnection connection = unconnectedConnectionSource.getUnconnectedConnection();
         connection.connect();
 
         final Jid nonExistentUser = JidCreate.bareFrom(Localpart.from(nonExistentUserString), connection.getXMPPServiceDomain().getDomain());
@@ -136,9 +136,9 @@ public class ResourceBindingIntegrationTest extends AbstractSmackLowLevelIntegra
      * @see <a href="https://igniterealtime.atlassian.net/jira/software/c/projects/OF/issues/OF-2565">issue OF-2565</a>
      */
     @SmackIntegrationTest
-    public void testSendStanzaBeforeLoginToSelf() throws XMPPException, SmackException, IOException, InterruptedException
+    public void testSendStanzaBeforeLoginToSelf(UnconnectedConnectionSource unconnectedConnectionSource) throws XMPPException, SmackException, IOException, InterruptedException
     {
-        final AbstractXMPPConnection connection = getUnconnectedConnection();
+        final AbstractXMPPConnection connection = unconnectedConnectionSource.getUnconnectedConnection();
         connection.connect();
 
         // connection.getUser() will be null prior to resource binding.
@@ -194,9 +194,9 @@ public class ResourceBindingIntegrationTest extends AbstractSmackLowLevelIntegra
      * @see <a href="https://igniterealtime.atlassian.net/jira/software/c/projects/OF/issues/OF-2565">issue OF-2565</a>
      */
     @SmackIntegrationTest
-    public void testSendStanzaBeforeLoginServer() throws XMPPException, SmackException, IOException, InterruptedException
+    public void testSendStanzaBeforeLoginServer(UnconnectedConnectionSource unconnectedConnectionSource) throws XMPPException, SmackException, IOException, InterruptedException
     {
-        final AbstractXMPPConnection connection = getUnconnectedConnection();
+        final AbstractXMPPConnection connection = unconnectedConnectionSource.getUnconnectedConnection();
         connection.connect();
 
         // connection.getUser() will be null prior to resource binding.
