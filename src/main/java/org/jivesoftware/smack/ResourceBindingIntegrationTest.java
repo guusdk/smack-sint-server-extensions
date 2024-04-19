@@ -31,6 +31,7 @@ import org.jxmpp.jid.impl.JidCreate;
 import org.jxmpp.jid.parts.Localpart;
 
 import java.io.IOException;
+import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -64,7 +65,7 @@ public class ResourceBindingIntegrationTest extends AbstractSmackLowLevelIntegra
         "If, before completing the resource binding step, the client attempts to send an XML stanza to an entity " +
         "other than the server itself or the client's account, the server MUST NOT process the stanza and MUST close " +
         "the stream with a <not-authorized/> stream error (Section 4.9.3.12).")
-    public void testSendStanzaBeforeLoginToSomeoneElse(UnconnectedConnectionSource unconnectedConnectionSource) throws XMPPException, SmackException, IOException, InterruptedException
+    public void testSendStanzaBeforeLoginToSomeoneElse(UnconnectedConnectionSource unconnectedConnectionSource) throws XMPPException, SmackException, IOException, InterruptedException, TimeoutException
     {
         final String nonExistentUserString = StringUtils.insecureRandomString(24);
 
@@ -99,11 +100,8 @@ public class ResourceBindingIntegrationTest extends AbstractSmackLowLevelIntegra
             connection.addConnectionListener(listener);
             connection.sendStanza(message);
 
-            final AtomicReference<XMPPException.StreamErrorException> result = new AtomicReference<>();
-            assertDoesNotThrow(() -> result.set(errorReceived.waitForResult(timeout)));
-            assertNotNull(result.get());
-            final StreamError streamError = result.get().getStreamError();
-            assertEquals(StreamError.Condition.not_authorized, streamError.getCondition());
+            final XMPPException.StreamErrorException result = assertResult(errorReceived, "Expected an error to be returned when connection sent a message prior to resource-binding/authentication, but no error was returned on connection " + connection);
+            assertEquals(StreamError.Condition.not_authorized, result.getStreamError().getCondition(), "Unexpected condition in (expected) error after a message was sent on a connection that had not yet performed resource-binding/authentication.");
         } finally {
             connection.disconnect();
         }
@@ -156,6 +154,7 @@ public class ResourceBindingIntegrationTest extends AbstractSmackLowLevelIntegra
             // It doesn't really matter if the response is a result or error. Receiving a response indicates that the
             // server has processed the request, instead of closing the stream.
             assertNotNull(response);
+            assertTrue(connection.connected, "Server unexpectedly closed connection that sent a stanza to the client's account prior to authentication/resource binding.");
         } finally {
             connection.disconnect();
         }
@@ -208,6 +207,7 @@ public class ResourceBindingIntegrationTest extends AbstractSmackLowLevelIntegra
             // It doesn't really matter if the response is a result or error. Receiving a response indicates that the
             // server has processed the request, instead of closing the stream.
             assertNotNull(response);
+            assertTrue(connection.connected, "Server unexpectedly closed connection that sent a stanza to the server prior to authentication/resource binding.");
         } finally {
             connection.disconnect();
         }
