@@ -18,6 +18,7 @@ package org.jivesoftware.smack;
 import org.igniterealtime.smack.inttest.AbstractSmackLowLevelIntegrationTest;
 import org.igniterealtime.smack.inttest.SmackIntegrationTestEnvironment;
 import org.igniterealtime.smack.inttest.annotations.SmackIntegrationTest;
+import org.igniterealtime.smack.inttest.annotations.SpecificationReference;
 import org.igniterealtime.smack.inttest.util.ResultSyncPoint;
 import org.jivesoftware.smack.filter.*;
 import org.jivesoftware.smack.packet.*;
@@ -39,6 +40,7 @@ import static org.junit.jupiter.api.Assertions.*;
  *
  * @author Guus der Kinderen, guus.der.kinderen@gmail.com
  */
+@SpecificationReference(document = "RFC 6120")
 public class ResourceBindingIntegrationTest extends AbstractSmackLowLevelIntegrationTest {
 
     public ResourceBindingIntegrationTest(SmackIntegrationTestEnvironment environment) {
@@ -49,15 +51,6 @@ public class ResourceBindingIntegrationTest extends AbstractSmackLowLevelIntegra
      * Asserts that the stream is closed with a 'not_authorized' stream error when a stanza is sent to a user different
      * from the user that is using the connection, before the user authenticates.
      *
-     * <p>From RFC-6120 § 7.1:</p>
-     * <blockquote>
-     * If, before completing the resource binding step, the client attempts
-     * to send an XML stanza to an entity other than the server itself or
-     * the client's account, the server MUST NOT process the stanza and MUST
-     * close the stream with a <not-authorized/> stream error
-     * (Section 4.9.3.12).
-     * </blockquote>
-     *
      * Ideally, we'd test this (too) after authentication but before resource binding, but the Smack API does not
      * support this.
      *
@@ -67,7 +60,10 @@ public class ResourceBindingIntegrationTest extends AbstractSmackLowLevelIntegra
      * @throws SmackException if Smack detected an exceptional situation.
      * @see <a href="https://igniterealtime.atlassian.net/jira/software/c/projects/OF/issues/OF-2565">issue OF-2565</a>
      */
-    @SmackIntegrationTest
+    @SmackIntegrationTest(section = "7.1", quote =
+        "If, before completing the resource binding step, the client attempts to send an XML stanza to an entity " +
+        "other than the server itself or the client's account, the server MUST NOT process the stanza and MUST close " +
+        "the stream with a <not-authorized/> stream error (Section 4.9.3.12).")
     public void testSendStanzaBeforeLoginToSomeoneElse(UnconnectedConnectionSource unconnectedConnectionSource) throws XMPPException, SmackException, IOException, InterruptedException
     {
         final String nonExistentUserString = StringUtils.insecureRandomString(24);
@@ -117,15 +113,6 @@ public class ResourceBindingIntegrationTest extends AbstractSmackLowLevelIntegra
      * Asserts that the stream is NOT closed (with a 'not_authorized' stream error) when a stanza is sent to 'yourself',
      * before the user authenticates.
      *
-     * <p>From RFC-6120 § 7.1:</p>
-     * <blockquote>
-     * If, before completing the resource binding step, the client attempts
-     * to send an XML stanza to an entity other than the server itself or
-     * the client's account, the server MUST NOT process the stanza and MUST
-     * close the stream with a <not-authorized/> stream error
-     * (Section 4.9.3.12).
-     * </blockquote>
-     *
      * Ideally, we'd test this (too) after authentication but before resource binding, but the Smack API does not
      * support this.
      *
@@ -135,7 +122,10 @@ public class ResourceBindingIntegrationTest extends AbstractSmackLowLevelIntegra
      * @throws SmackException if Smack detected an exceptional situation.
      * @see <a href="https://igniterealtime.atlassian.net/jira/software/c/projects/OF/issues/OF-2565">issue OF-2565</a>
      */
-    @SmackIntegrationTest
+    @SmackIntegrationTest(section = "7.1", quote =
+        "If, before completing the resource binding step, the client attempts to send an XML stanza to an entity " +
+        "other than the server itself or the client's account, the server MUST NOT process the stanza and MUST close " +
+        "the stream with a <not-authorized/> stream error (Section 4.9.3.12).")
     public void testSendStanzaBeforeLoginToSelf(UnconnectedConnectionSource unconnectedConnectionSource) throws XMPPException, SmackException, IOException, InterruptedException
     {
         final AbstractXMPPConnection connection = unconnectedConnectionSource.getUnconnectedConnection();
@@ -175,15 +165,6 @@ public class ResourceBindingIntegrationTest extends AbstractSmackLowLevelIntegra
      * Asserts that the stream is NOT closed (with a 'not_authorized' stream error) when a stanza is sent to the server
      * itself, before the user authenticates.
      *
-     * <p>From RFC-6120 § 7.1:</p>
-     * <blockquote>
-     * If, before completing the resource binding step, the client attempts
-     * to send an XML stanza to an entity other than the server itself or
-     * the client's account, the server MUST NOT process the stanza and MUST
-     * close the stream with a <not-authorized/> stream error
-     * (Section 4.9.3.12).
-     * </blockquote>
-     *
      * Ideally, we'd test this (too) after authentication but before resource binding, but the Smack API does not
      * support this.
      *
@@ -193,7 +174,10 @@ public class ResourceBindingIntegrationTest extends AbstractSmackLowLevelIntegra
      * @throws SmackException if Smack detected an exceptional situation.
      * @see <a href="https://igniterealtime.atlassian.net/jira/software/c/projects/OF/issues/OF-2565">issue OF-2565</a>
      */
-    @SmackIntegrationTest
+    @SmackIntegrationTest(section = "7.1", quote =
+        "If, before completing the resource binding step, the client attempts to send an XML stanza to an entity " +
+        "other than the server itself or the client's account, the server MUST NOT process the stanza and MUST close " +
+        "the stream with a <not-authorized/> stream error (Section 4.9.3.12).")
     public void testSendStanzaBeforeLoginServer(UnconnectedConnectionSource unconnectedConnectionSource) throws XMPPException, SmackException, IOException, InterruptedException
     {
         final AbstractXMPPConnection connection = unconnectedConnectionSource.getUnconnectedConnection();
