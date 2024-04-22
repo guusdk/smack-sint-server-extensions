@@ -41,7 +41,7 @@ import static org.junit.jupiter.api.Assertions.*;
  *
  * @author Guus der Kinderen, guus.der.kinderen@gmail.com
  */
-@SpecificationReference(document = "RFC 6120")
+@SpecificationReference(document = "RFC6120")
 public class ResourceBindingIntegrationTest extends AbstractSmackLowLevelIntegrationTest {
 
     public ResourceBindingIntegrationTest(SmackIntegrationTestEnvironment environment) {
