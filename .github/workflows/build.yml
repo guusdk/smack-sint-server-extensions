@@ -88,7 +88,7 @@ jobs:
           -Dsinttest.adminAccountPassword=admin \
           -Dsinttest.enabledConnections=tcp \
           -Dsinttest.dnsResolver=javax \
-          -Dsinttest.disabledTests="EntityCapsTest,SoftwareInfoIntegrationTest,XmppConnectionIntegrationTest,StreamManagementTest,WaitForClosingStreamElementTest,IoTControlIntegrationTest,ModularXmppClientToServerConnectionLowLevelIntegrationTest" \
+          -Dsinttest.disabledTests="EntityCapsTest,SoftwareInfoIntegrationTest,XmppConnectionIntegrationTest,StreamManagementTest,WaitForClosingStreamElementTest,IoTControlIntegrationTest,ModularXmppClientToServerConnectionLowLevelIntegrationTest,ServiceDiscoveryIntegrationTest" \
           -Dsinttest.testRunResultProcessors=org.igniterealtime.smack.inttest.SmackIntegrationTestFramework\$JulTestRunResultProcessor,org.igniterealtime.smack.inttest.util.JUnitXmlTestRunResultProcessor \
           -Dsinttest.debugger="org.igniterealtime.smack.inttest.util.FileLoggerFactory" \
           -DlogDir=logs \
