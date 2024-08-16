@@ -64,14 +64,14 @@ public class StdOutTestRunResultProcessor implements SmackIntegrationTestFramewo
             titleBySpec.put(specification, findTitle(specTitles, specification, 81));
         }
         final int longestSpecCharCount = titleBySpec.values().stream().map(String::length).max(Integer::compareTo).orElse(0);
-        final int longestSuccCharCount = successFulTestsBySpec.values().stream().map(Collection::size).map(i->i.toString().length()).max(Integer::compareTo).orElse(0);
-        final int longestFailCharCount = failedTestsBySpec.values().stream().map(Collection::size).map(i->i.toString().length()).max(Integer::compareTo).orElse(0);
+        final int longestSuccCharCount = successFulTestsBySpec.values().stream().map(Collection::size).map(i->i.toString().length()).max(Integer::compareTo).orElse(1);
+        final int longestFailCharCount = failedTestsBySpec.values().stream().map(Collection::size).map(i->i.toString().length()).max(Integer::compareTo).orElse(1);
         for (final String specification : specifications) {
             final int success = successFulTestsBySpec.getOrDefault(specification, Collections.emptySet()).size();
             final int fail = failedTestsBySpec.getOrDefault(specification, Collections.emptySet()).size();
             final int impossible = impossibleTestsBySpec.getOrDefault(specification, Collections.emptySet()).size() + getMethodsInImpossibleTestClasses(impossibleTestClassesBySpec.getOrDefault(specification, Collections.emptySet())).size();
             final String title = titleBySpec.get(specification);
-            System.out.println("• " + String.format("%-" + longestSpecCharCount+"s", title) + " " + String.format("%"+longestSuccCharCount+"s", success) + " ✔  " + String.format("%"+longestFailCharCount+"s", fail) + " \uD83D\uDC80 " + String.format("%3s", impossible) + " ✖");
+            System.out.println("• " + String.format("%-" + Math.max(1, longestSpecCharCount)+"s", title) + " " + String.format("%"+longestSuccCharCount+"s", success) + " ✔  " + String.format("%"+longestFailCharCount+"s", fail) + " \uD83D\uDC80 " + String.format("%3s", impossible) + " ✖");
         }
 
         if (!impossibleTestsBySpec.isEmpty() || !impossibleTestClassesBySpec.isEmpty()) {
