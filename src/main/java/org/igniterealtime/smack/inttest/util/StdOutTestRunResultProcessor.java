@@ -25,6 +25,7 @@ import java.nio.file.Paths;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.stream.Collectors;
 
 public class StdOutTestRunResultProcessor implements SmackIntegrationTestFramework.TestRunResultProcessor
@@ -48,10 +49,10 @@ public class StdOutTestRunResultProcessor implements SmackIntegrationTestFramewo
             System.err.println("Unable to load specifications.properties");
         }
 
-        final Map<String, Collection<SuccessfulTest>> successFulTestsBySpec = aggregateBySpecification(testRunResult.getSuccessfulTests());
-        final Map<String, Collection<FailedTest>> failedTestsBySpec = aggregateBySpecification(testRunResult.getFailedTests());
-        final Map<String, Collection<TestNotPossible>> impossibleTestsBySpec = aggregateBySpecification(testRunResult.getNotPossibleTests());
-        final Map<String, Collection<Class<? extends AbstractSmackIntTest>>> impossibleTestClassesBySpec = aggregateBySpecification(testRunResult.getImpossibleTestClasses().keySet());
+        final SortedMap<String, Collection<SuccessfulTest>> successFulTestsBySpec = aggregateBySpecification(testRunResult.getSuccessfulTests());
+        final SortedMap<String, Collection<FailedTest>> failedTestsBySpec = aggregateBySpecification(testRunResult.getFailedTests());
+        final SortedMap<String, Collection<TestNotPossible>> impossibleTestsBySpec = aggregateBySpecification(testRunResult.getNotPossibleTests());
+        final SortedMap<String, Collection<Class<? extends AbstractSmackIntTest>>> impossibleTestClassesBySpec = aggregateBySpecification(testRunResult.getImpossibleTestClasses().keySet());
 
         final SortedSet<String> specifications = new TreeSet<>();
         specifications.addAll(successFulTestsBySpec.keySet());
@@ -110,20 +111,26 @@ public class StdOutTestRunResultProcessor implements SmackIntegrationTestFramewo
             final SortedMap<String, Collection<FailedTest>> sortedFailedTestBySpec = new TreeMap<>(failedTestsBySpec);
             for (final Map.Entry<String, Collection<FailedTest>> entry : sortedFailedTestBySpec.entrySet()) {
                 final String title = entry.getKey();
+
+                final SortedMap<String, String> sortedBlobs = new TreeMap<>();
                 for (final FailedTest failedTest : entry.getValue()) {
-                    // TODO sort on spec and section
                     final String sectionReference = JUnitXmlTestRunResultProcessor.getSpecificationSection(failedTest.concreteTest.getMethod());
                     final String quote = JUnitXmlTestRunResultProcessor.getSpecificationQuote(failedTest.concreteTest.getMethod());
                     final Path logPath = FileLogger.getLog(System.getProperty("logDir") == null ? null : Paths.get(System.getProperty("logDir")), failedTest.concreteTest);
-//                    System.out.println("• " + (sectionReference == null ? title : title + ", section " + sectionReference) + " \"" + quote + "\"");
-                    System.out.println("• " + findTitle(specTitles, title, -1) + (sectionReference != null ? ", Section " + sectionReference : ""));
-                    System.out.println("      \"" + quote + "\"");
-                    System.out.println("  Failure reason  : " + failedTest.failureReason.getMessage());
-                    System.out.println("  Stanza log file : " + logPath);
-                    System.out.println("  Test class      : " + failedTest.concreteTest.getMethod().getDeclaringClass());
-                    System.out.println("  Test method     : " + failedTest.concreteTest.getMethod().getName());
-                    System.out.println();
+                    final StringBuilder blob = new StringBuilder();
+                    blob.append("• ").append(findTitle(specTitles, title, -1)).append(sectionReference != null ? ", Section " + sectionReference : "").append(System.lineSeparator());
+                    blob.append("      \"" + quote + "\"").append(System.lineSeparator());
+                    blob.append("  Failure reason  : " + failedTest.failureReason.getMessage()).append(System.lineSeparator());
+                    blob.append("  Stanza log file : " + logPath).append(System.lineSeparator());
+                    blob.append("  Test class      : " + failedTest.concreteTest.getMethod().getDeclaringClass()).append(System.lineSeparator());
+                    blob.append("  Test method     : " + failedTest.concreteTest.getMethod().getName()).append(System.lineSeparator());
+                    blob.append(System.lineSeparator());
+
+                    // The key in this map is to force a repeatable order, but is not otherwise used in the output.
+                    sortedBlobs.put(sectionReference + '|' + failedTest.concreteTest.getMethod().getDeclaringClass() + '#' + failedTest.concreteTest.getMethod().getName(), blob.toString());
                 }
+
+                sortedBlobs.values().forEach(System.out::print);
             }
         }
     }
@@ -149,8 +156,8 @@ public class StdOutTestRunResultProcessor implements SmackIntegrationTestFramewo
         return smackIntegrationTestMethods;
     }
 
-    public static <T extends TestResult> Map<String, Collection<T>> aggregateBySpecification(final Collection<T> testResults) {
-        final ConcurrentMap<String, Collection<T>> result = new ConcurrentHashMap<>();
+    public static <T extends TestResult> SortedMap<String, Collection<T>> aggregateBySpecification(final Collection<T> testResults) {
+        final ConcurrentSkipListMap<String, Collection<T>> result = new ConcurrentSkipListMap<>();
         for (final T testResult : testResults) {
             String specificationReference = JUnitXmlTestRunResultProcessor.getSpecificationReference(testResult.concreteTest.getMethod());
             specificationReference = humanReadibleSpec(specificationReference);
@@ -159,9 +166,9 @@ public class StdOutTestRunResultProcessor implements SmackIntegrationTestFramewo
         return result;
     }
 
-    private Map<String, Collection<Class<? extends AbstractSmackIntTest>>> aggregateBySpecification(Set<Class<? extends AbstractSmackIntTest>> classes)
+    private SortedMap<String, Collection<Class<? extends AbstractSmackIntTest>>> aggregateBySpecification(Set<Class<? extends AbstractSmackIntTest>> classes)
     {
-        final Map<String, Collection<Class<? extends AbstractSmackIntTest>>> result = new ConcurrentHashMap<>();
+        final SortedMap<String, Collection<Class<? extends AbstractSmackIntTest>>> result = new ConcurrentSkipListMap<>();
         for (final Class<? extends AbstractSmackIntTest> clazz : classes) {
             String specificationReference = JUnitXmlTestRunResultProcessor.getSpecificationReference(clazz);
             specificationReference = humanReadibleSpec(specificationReference);
