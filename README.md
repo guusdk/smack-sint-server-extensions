@@ -69,7 +69,7 @@ docker run xmpp_interop_tests --help
 
 As usual, identical to the docker commands, substituting `docker` with `podman`.
 
-The repository contains a dedicated `Containerfile` to build the OCI image without the need for specifying or configuring search repositories.=
+The repository contains a dedicated `Containerfile` to build the OCI image without the need for specifying or configuring search repositories.
 
 ### Log XMPP traffic in files
 
