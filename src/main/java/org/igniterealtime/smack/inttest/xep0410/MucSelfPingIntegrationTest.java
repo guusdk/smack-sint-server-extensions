@@ -113,13 +113,12 @@ public class MucSelfPingIntegrationTest extends AbstractSmackIntegrationTest
         try {
             // Setup test fixture.
             createRoom();
-            oldPingHandler = conOne.unregisterIQRequestHandler(Ping.ELEMENT, Ping.NAMESPACE, IQ.Type.get);
             MultiUserChatManager.getInstanceFor(conOne).getMultiUserChat(testRoomAddress).join(nick);
 
             final FullJid addressInRoom = JidCreate.fullFrom(testRoomAddress, nick);
             final Ping request = new Ping(addressInRoom);
             final AtomicBoolean wasInvoked = new AtomicBoolean(false);
-            conOne.registerIQRequestHandler(new IQRequestHandler()
+            oldPingHandler = conOne.registerIQRequestHandler(new IQRequestHandler()
             {
                 @Override
                 public IQ handleIQRequest(IQ iqRequest) {
@@ -179,16 +178,13 @@ public class MucSelfPingIntegrationTest extends AbstractSmackIntegrationTest
             conOneSecondary.connect();
             conOneSecondary.login(((AbstractXMPPConnection)conOne).getConfiguration().getUsername(), ((AbstractXMPPConnection)conOne).getConfiguration().getPassword(), Resourcepart.from(StringUtils.randomString(7)));
 
-            oldPingHandlerA = conOne.unregisterIQRequestHandler(Ping.ELEMENT, Ping.NAMESPACE, IQ.Type.get);
-            oldPingHandlerB = conOneSecondary.unregisterIQRequestHandler(Ping.ELEMENT, Ping.NAMESPACE, IQ.Type.get);
-
             MultiUserChatManager.getInstanceFor(conOne).getMultiUserChat(testRoomAddress).join(nickA);
             MultiUserChatManager.getInstanceFor(conOneSecondary).getMultiUserChat(testRoomAddress).join(nickB);
 
             final FullJid addressInRoom = JidCreate.fullFrom(testRoomAddress, nickA);
 
             final AtomicBoolean wasInvokedA = new AtomicBoolean(false);
-            conOne.registerIQRequestHandler(new IQRequestHandler()
+            oldPingHandlerA = conOne.registerIQRequestHandler(new IQRequestHandler()
             {
                 @Override
                 public IQ handleIQRequest(IQ iqRequest) {
@@ -218,7 +214,7 @@ public class MucSelfPingIntegrationTest extends AbstractSmackIntegrationTest
             });
 
             final AtomicBoolean wasInvokedB = new AtomicBoolean(false);
-            conOneSecondary.registerIQRequestHandler(new IQRequestHandler()
+            oldPingHandlerB = conOneSecondary.registerIQRequestHandler(new IQRequestHandler()
             {
                 @Override
                 public IQ handleIQRequest(IQ iqRequest) {
