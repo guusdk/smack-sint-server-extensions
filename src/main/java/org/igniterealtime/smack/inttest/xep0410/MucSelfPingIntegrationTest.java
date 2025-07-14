@@ -218,7 +218,7 @@ public class MucSelfPingIntegrationTest extends AbstractSmackIntegrationTest
             });
 
             final AtomicBoolean wasInvokedB = new AtomicBoolean(false);
-            conOne.registerIQRequestHandler(new IQRequestHandler()
+            conOneSecondary.registerIQRequestHandler(new IQRequestHandler()
             {
                 @Override
                 public IQ handleIQRequest(IQ iqRequest) {
