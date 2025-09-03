@@ -151,7 +151,7 @@ public class MultiUserChatSecurityConsiderationsIntegrationTest extends Abstract
         final Resourcepart nicknameOwner = Resourcepart.from("owner-" + randomString);
         final Resourcepart nicknameParticipant = Resourcepart.from("participant-" + randomString);
         try {
-            createNonAnonymousMuc(mucAsSeenByOwner, nicknameOwner);
+            createMucNonAnonymous(mucAsSeenByOwner, nicknameOwner);
 
             // Execute system under test
             final Presence initialPresence = mucAsSeenByParticipant.join(nicknameParticipant);
@@ -187,7 +187,7 @@ public class MultiUserChatSecurityConsiderationsIntegrationTest extends Abstract
             }
         };
         try {
-            createSemiAnonymousMuc(mucAsSeenByOwner, nicknameOwner);
+            createMucSemiAnonymous(mucAsSeenByOwner, nicknameOwner);
 
             mucAsSeenByParticipant.join(nicknameParticipant);
             mucAsSeenByParticipant.addMessageListener(listener);

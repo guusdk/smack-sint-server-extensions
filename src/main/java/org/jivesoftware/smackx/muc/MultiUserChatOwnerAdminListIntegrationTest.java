@@ -115,7 +115,7 @@ public class MultiUserChatOwnerAdminListIntegrationTest extends AbstractMultiUse
 
         final Resourcepart nicknameOwner = Resourcepart.from("owner-" + randomString);
 
-        createSemiAnonymousMuc(mucAsSeenByOwner, nicknameOwner);
+        createMucSemiAnonymous(mucAsSeenByOwner, nicknameOwner);
         try {
             // Execute system under test.
             final MUCAdmin iq = new MUCAdmin();
@@ -149,7 +149,7 @@ public class MultiUserChatOwnerAdminListIntegrationTest extends AbstractMultiUse
         final Resourcepart nicknameOwner = Resourcepart.from("owner-" + randomString);
         final Resourcepart nicknameParticipant = Resourcepart.from("participant-" + randomString);
 
-        createSemiAnonymousMuc(mucAsSeenByOwner, nicknameOwner);
+        createMucSemiAnonymous(mucAsSeenByOwner, nicknameOwner);
         try {
             mucAsSeenByParticipant.join(nicknameParticipant);
 

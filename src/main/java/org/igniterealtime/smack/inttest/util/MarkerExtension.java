@@ -21,6 +21,7 @@ import org.jivesoftware.smack.provider.ExtensionElementProvider;
 import org.jivesoftware.smack.util.ParserUtils;
 import org.jivesoftware.smack.xml.XmlPullParser;
 import org.jivesoftware.smack.xml.XmlPullParserException;
+import org.jxmpp.JxmppContext;
 
 import javax.xml.namespace.QName;
 import java.io.IOException;
@@ -69,7 +70,7 @@ public class MarkerExtension implements ExtensionElement
         public Provider() {
         }
 
-        public MarkerExtension parse(XmlPullParser parser, int initialDepth, XmlEnvironment xmlEnvironment) throws XmlPullParserException, IOException
+        public MarkerExtension parse(XmlPullParser parser, int initialDepth, XmlEnvironment xmlEnvironment, JxmppContext jxmppContext) throws XmlPullParserException, IOException
         {
             final String value = ParserUtils.getRequiredNextText(parser);
             return new MarkerExtension(value);

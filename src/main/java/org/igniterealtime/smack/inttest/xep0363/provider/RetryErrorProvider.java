@@ -19,6 +19,7 @@ import org.igniterealtime.smack.inttest.xep0363.element.RetryError;
 import org.jivesoftware.smack.packet.XmlEnvironment;
 import org.jivesoftware.smack.provider.ExtensionElementProvider;
 import org.jivesoftware.smack.xml.XmlPullParser;
+import org.jxmpp.JxmppContext;
 
 /**
  * A provider of HTTP File Upload 'retry' error elements.
@@ -29,7 +30,7 @@ import org.jivesoftware.smack.xml.XmlPullParser;
 public class RetryErrorProvider extends ExtensionElementProvider<RetryError>
 {
     @Override
-    public RetryError parse(XmlPullParser parser, int initialDepth, XmlEnvironment xmlEnvironment) {
+    public RetryError parse(XmlPullParser parser, int initialDepth, XmlEnvironment xmlEnvironment, JxmppContext jxmppContext) {
         String stamp = parser.getAttributeValue("stamp");
         return new RetryError(stamp);
     }

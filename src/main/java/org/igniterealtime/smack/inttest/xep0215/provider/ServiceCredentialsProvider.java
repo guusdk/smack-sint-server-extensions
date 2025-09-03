@@ -22,6 +22,7 @@ import org.jivesoftware.smack.provider.IqProvider;
 import org.jivesoftware.smack.util.ParserUtils;
 import org.jivesoftware.smack.xml.XmlPullParser;
 import org.jivesoftware.smack.xml.XmlPullParserException;
+import org.jxmpp.JxmppContext;
 
 import java.io.IOException;
 
@@ -33,7 +34,7 @@ import java.io.IOException;
  */
 public class ServiceCredentialsProvider extends IqProvider<ServiceCredentials>
 {
-    public ServiceCredentials parse(XmlPullParser parser, int initialDepth, IqData iqData, XmlEnvironment xmlEnvironment)
+    public ServiceCredentials parse(XmlPullParser parser, int initialDepth, IqData iqData, XmlEnvironment xmlEnvironment, JxmppContext jxmppContext)
         throws XmlPullParserException, IOException
     {
         boolean done = false;
