@@ -34,6 +34,7 @@ import org.jivesoftware.smack.util.StringUtils;
 import org.jivesoftware.smack.xml.XmlPullParser;
 import org.jivesoftware.smack.xml.XmlPullParserException;
 import org.jivesoftware.smackx.disco.ServiceDiscoveryManager;
+import org.jxmpp.JxmppContext;
 import org.jxmpp.jid.EntityFullJid;
 import org.jxmpp.jid.Jid;
 import org.jxmpp.jid.impl.JidCreate;
@@ -586,7 +587,7 @@ public class RFC6121Section8_5_3_2_3_IqIntegrationTest extends AbstractSmackInte
         public InternalProvider() {
         }
 
-        public TestIQ parse(XmlPullParser parser, int initialDepth, IqData iqData, XmlEnvironment xmlEnvironment) throws XmlPullParserException, IOException, SmackParsingException
+        public TestIQ parse(XmlPullParser parser, int initialDepth, IqData iqData, XmlEnvironment xmlEnvironment, JxmppContext jxmppContext) throws XmlPullParserException, IOException, SmackParsingException
         {
             TestIQ answer = new TestIQ();
             boolean done = false;
@@ -596,7 +597,7 @@ public class RFC6121Section8_5_3_2_3_IqIntegrationTest extends AbstractSmackInte
                 if (eventType == XmlPullParser.Event.START_ELEMENT) {
                     String value = parser.nextText();
                     answer.setValue(value);
-                    PacketParserUtils.addExtensionElement(answer, parser, xmlEnvironment);
+                    PacketParserUtils.addExtensionElement(answer, parser, xmlEnvironment, jxmppContext);
                 } else if (eventType == XmlPullParser.Event.END_ELEMENT && parser.getName().equals("test")) {
                     done = true;
                 }

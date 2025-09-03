@@ -912,7 +912,7 @@ public class MultiUserChatOwnerConfigRoomIntegrationTest extends AbstractMultiUs
 
         final int statusCode = 172;
         try {
-            createSemiAnonymousMuc(mucAsSeenByOwner, nicknameOwner);
+            createMucSemiAnonymous(mucAsSeenByOwner, nicknameOwner);
 
             mucAsSeenByParticipant.join(nicknameParticipant);
 
@@ -960,7 +960,7 @@ public class MultiUserChatOwnerConfigRoomIntegrationTest extends AbstractMultiUs
 
         final int statusCode = 173;
         try {
-            createNonAnonymousMuc(mucAsSeenByOwner, nicknameOwner);
+            createMucNonAnonymous(mucAsSeenByOwner, nicknameOwner);
 
             mucAsSeenByParticipant.join(nicknameParticipant);
 

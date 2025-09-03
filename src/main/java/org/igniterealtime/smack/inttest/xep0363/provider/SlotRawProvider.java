@@ -24,6 +24,7 @@ import org.jivesoftware.smack.xml.XmlPullParser;
 import org.jivesoftware.smack.xml.XmlPullParserException;
 import org.jivesoftware.smackx.httpfileupload.HttpFileUploadManager;
 import org.jivesoftware.smackx.httpfileupload.UploadService;
+import org.jxmpp.JxmppContext;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -40,7 +41,7 @@ import java.util.Map;
 public class SlotRawProvider extends IqProvider<SlotRaw> {
 
     @Override
-    public SlotRaw parse(XmlPullParser parser, int initialDepth, IqData iqData, XmlEnvironment xmlEnvironment) throws XmlPullParserException, IOException {
+    public SlotRaw parse(XmlPullParser parser, int initialDepth, IqData iqData, XmlEnvironment xmlEnvironment, JxmppContext jxmppContext) throws XmlPullParserException, IOException {
         final String namespace = parser.getNamespace();
 
         final UploadService.Version version = HttpFileUploadManager.namespaceToVersion(namespace);

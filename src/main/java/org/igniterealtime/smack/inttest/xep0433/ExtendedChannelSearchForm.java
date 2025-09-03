@@ -24,6 +24,7 @@ import org.jivesoftware.smack.provider.IqProvider;
 import org.jivesoftware.smack.util.PacketParserUtils;
 import org.jivesoftware.smack.xml.XmlPullParser;
 import org.jivesoftware.smack.xml.XmlPullParserException;
+import org.jxmpp.JxmppContext;
 
 import java.io.IOException;
 
@@ -45,7 +46,7 @@ public class ExtendedChannelSearchForm extends SimpleIQ
     public static class Provider extends IqProvider<ExtendedChannelSearchForm>
     {
         @Override
-        public ExtendedChannelSearchForm parse(XmlPullParser parser, int initialDepth, IqData iqData, XmlEnvironment xmlEnvironment) throws XmlPullParserException, IOException, SmackParsingException
+        public ExtendedChannelSearchForm parse(XmlPullParser parser, int initialDepth, IqData iqData, XmlEnvironment xmlEnvironment, JxmppContext jxmppContext) throws XmlPullParserException, IOException, SmackParsingException
         {
             ExtendedChannelSearchForm search = null;
 
@@ -54,7 +55,7 @@ public class ExtendedChannelSearchForm extends SimpleIQ
                 XmlPullParser.Event eventType = parser.next();
                 if (eventType == XmlPullParser.Event.START_ELEMENT && parser.getNamespace().equals("jabber:x:data")) {
                     search = new ExtendedChannelSearchForm();
-                    PacketParserUtils.addExtensionElement(search, parser, xmlEnvironment);
+                    PacketParserUtils.addExtensionElement(search, parser, xmlEnvironment, jxmppContext);
                 }
                 else if (eventType == XmlPullParser.Event.END_ELEMENT) {
                     if (parser.getName().equals(ELEMENT)) {

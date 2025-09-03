@@ -21,6 +21,7 @@ import org.jivesoftware.smack.provider.IqProvider;
 import org.jivesoftware.smack.util.ParserUtils;
 import org.jivesoftware.smack.xml.XmlPullParser;
 import org.jivesoftware.smack.xml.XmlPullParserException;
+import org.jxmpp.JxmppContext;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -58,7 +59,7 @@ public class ExtendedChannelResult extends SimpleIQ
     public static class Provider extends IqProvider<ExtendedChannelResult>
     {
         @Override
-        public ExtendedChannelResult parse(XmlPullParser parser, int i, IqData iqData, XmlEnvironment xmlEnvironment) throws XmlPullParserException, IOException, SmackParsingException, ParseException
+        public ExtendedChannelResult parse(XmlPullParser parser, int i, IqData iqData, XmlEnvironment xmlEnvironment, JxmppContext jxmppContext) throws XmlPullParserException, IOException, SmackParsingException, ParseException
         {
             final List<Item> items = new LinkedList<>();
             String address = null;

@@ -22,9 +22,9 @@ import org.jivesoftware.smack.provider.IqProvider;
 import org.jivesoftware.smack.util.ParserUtils;
 import org.jivesoftware.smack.xml.XmlPullParser;
 import org.jivesoftware.smack.xml.XmlPullParserException;
+import org.jxmpp.JxmppContext;
 
 import java.io.IOException;
-import java.text.ParseException;
 
 /**
  * A provider for DiscoverExternalServices stanzas.
@@ -34,7 +34,7 @@ import java.text.ParseException;
  */
 public class DiscoverExternalServicesProvider extends IqProvider<DiscoverExternalServices>
 {
-    public DiscoverExternalServices parse(XmlPullParser parser, int initialDepth, IqData iqData, XmlEnvironment xmlEnvironment)
+    public DiscoverExternalServices parse(XmlPullParser parser, int initialDepth, IqData iqData, XmlEnvironment xmlEnvironment, JxmppContext jxmppContext)
         throws XmlPullParserException, IOException
     {
         final DiscoverExternalServices result = new DiscoverExternalServices();
