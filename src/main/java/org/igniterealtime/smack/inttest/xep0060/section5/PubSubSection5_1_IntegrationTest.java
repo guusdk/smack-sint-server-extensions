@@ -33,7 +33,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * Tests as defined in paragraph 5.1 "Discover Features" of section 5 "Entity Use Cases" of XEP-0060 "Publish-Subscribe".
  *
  * @author Guus der Kinderen, guus.der.kinderen@gmail.com
- * @see <a href="https://xmpp.org/extensions/xep-0060.html">XEP-0060: Publish-Subscribe</a>
+ * @see <a href="https://xmpp.org/extensions/xep-0060.html#entity-features">XEP-0060: Publish-Subscribe</a>
  */
 @SpecificationReference(document = "XEP-0060", version = "1.26.0")
 public class PubSubSection5_1_IntegrationTest extends AbstractSmackIntegrationTest
@@ -85,15 +85,7 @@ public class PubSubSection5_1_IntegrationTest extends AbstractSmackIntegrationTe
     @SmackIntegrationTest(section = "5.1", quote = "The \"disco#info\" result returned by a pubsub service MUST indicate the identity of the service")
     public void testDiscoInfoResponseContainsIdentity() throws TestNotPossibleException
     {
-        // Setup test fixture.
-        if (pubsubServiceInfo == null) {
-            throw new TestNotPossibleException("PubSub service service discovery information response was missing or of type error.");
-        }
-
-        // Execute system under test.
-        // (This is achieved in the constructor of this class).
-
-        // Verify results.
+        checkIfWeCanRun();
         assertTrue(pubsubServiceInfo.getIdentities().stream().anyMatch(identity -> identity.isOfCategoryAndType("pubsub", "service")),
             "Expected the service discovery information response that was returned to '" + conOne.getUser() + "' by '" + pubsubServiceAddress + "' to contain an identity of type category 'pubsub' and type 'service' (but no such identity was found).");
     }
@@ -104,7 +96,8 @@ public class PubSubSection5_1_IntegrationTest extends AbstractSmackIntegrationTe
     @SmackIntegrationTest(section = "5.1", quote = "The \"disco#info\" result returned by a pubsub service MUST indicate the identity of the service")
     public void testDiscoInfoResponseContainsIdentityFeature() throws TestNotPossibleException
     {
-        assertFeature("http://jabber.org/protocol/pubsub");
+        checkIfWeCanRun();
+        assertServiceDiscoveryInformationContains("http://jabber.org/protocol/pubsub");
     }
 
     /**
@@ -113,7 +106,8 @@ public class PubSubSection5_1_IntegrationTest extends AbstractSmackIntegrationTe
     @SmackIntegrationTest(section = "5.1", quote = "The \"disco#info\" result returned by a pubsub service MUST indicate [...] which pubsub features are supported. [...] For information regarding which features are required, recommended, and optional, see the Feature Summary section of this document. [...] publish - Publishing items is supported. - REQUIRED")
     public void testDiscoInfoResponseContainsFeaturePublish() throws TestNotPossibleException
     {
-        assertFeature("http://jabber.org/protocol/pubsub#publish");
+        checkIfWeCanRun();
+        assertServiceDiscoveryInformationContains("http://jabber.org/protocol/pubsub#publish");
     }
 
     /**
@@ -122,26 +116,33 @@ public class PubSubSection5_1_IntegrationTest extends AbstractSmackIntegrationTe
     @SmackIntegrationTest(section = "5.1", quote = "The \"disco#info\" result returned by a pubsub service MUST indicate [...] which pubsub features are supported. [...] For information regarding which features are required, recommended, and optional, see the Feature Summary section of this document. [...] subscribe - Subscribing and unsubscribing are supported. - REQUIRED")
     public void testDiscoInfoResponseContainsFeatureSubscribe() throws TestNotPossibleException
     {
-        assertFeature("http://jabber.org/protocol/pubsub#subscribe");
+        checkIfWeCanRun();
+        assertServiceDiscoveryInformationContains("http://jabber.org/protocol/pubsub#subscribe");
+    }
+
+    /**
+     * Verifies that (most of the) tests in this class can run, throwing a TestNotPossibleException if that's not the
+     * case.
+     *
+     * This method checks that the pub/sub service provided a non-empty service discovery information response.
+     *
+     * @throws TestNotPossibleException When the pub/sub service does not provide a usable service discovery information response.
+     */
+    public void checkIfWeCanRun() throws TestNotPossibleException
+    {
+        if (pubsubServiceInfo == null) {
+            throw new TestNotPossibleException("PubSub service service discovery information response was missing or of type error.");
+        }
     }
 
     /**
      * A wrapper that removes boilerplate assertion code, to assert that the recorded discovery information response
      * from the pubsub service contains a particular feature
      *
-     * @param feature The feature that is expected to be in the resonse.
+     * @param feature The feature that is expected to be in the response.
      */
-    protected void assertFeature(final String feature) throws TestNotPossibleException
+    protected void assertServiceDiscoveryInformationContains(final String feature) throws TestNotPossibleException
     {
-        // Setup test fixture.
-        if (pubsubServiceInfo == null) {
-            throw new TestNotPossibleException("PubSub service service discovery information response was missing or of type error.");
-        }
-
-        // Execute system under test.
-        // (This is achieved in the constructor of this class).
-
-        // Verify results.
         assertTrue(pubsubServiceInfo.containsFeature(feature),
             "Expected the service discovery information response that was returned to '" + conOne.getUser() + "' by '" + pubsubServiceAddress + "' to contain the feature '" + feature + "' (but no such feature was found).");
     }
