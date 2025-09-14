@@ -87,12 +87,12 @@ public class PubSubUtils
 
     /**
      * Asserts that the provided service discovery item is a representation of a pub/sub node with a particular ID,
-     * using the 'JID addressing' mechanism, as described in section 6.8.1 of XEP-0060.
+     * using the 'JID addressing' mechanism, as described in section 4.6.1 of XEP-0060.
      *
      * @param expectedNodeId The ID of the node that is expected to be represented by the item
      * @param item a service discovery item
      * @param message error message used when the assertion fails.
-     * @see <a href="https://xmpp.org/extensions/xep-0060.html#addressing-jid">XEP-0060 Publish-Subscribe, Section 6.8.1 JID</a>
+     * @see <a href="https://xmpp.org/extensions/xep-0060.html#addressing-jid">XEP-0060 Publish-Subscribe, Section 4.6.1 JID</a>
      */
     public static void assertValidJidAddressing(final String expectedNodeId, final DiscoverItems.Item item, final String message)
     {
