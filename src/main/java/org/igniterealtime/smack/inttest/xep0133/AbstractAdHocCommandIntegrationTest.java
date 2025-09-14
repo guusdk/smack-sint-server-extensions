@@ -58,7 +58,7 @@ public class AbstractAdHocCommandIntegrationTest extends AbstractSmackIntegratio
         this.environment = environment;
 
         if (sinttestConfiguration.adminAccountUsername == null) {
-            throw new TestNotPossibleException("This test requires an admin account to be configured.");
+            throw new TestNotPossibleException("This test requires an admin account to be configured. Configuration instructions available at https://xmpp-interop-testing.github.io/");
         }
         adminConnection = AccountUtilities.spawnNewConnection(environment, sinttestConfiguration);
         adminConnection.connect();
