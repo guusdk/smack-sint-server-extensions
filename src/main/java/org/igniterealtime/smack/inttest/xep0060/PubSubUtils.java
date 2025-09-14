@@ -62,12 +62,12 @@ public class PubSubUtils
 
     /**
      * Asserts that the provided service discovery item is a representation of a pub/sub node with a particular ID,
-     * using any of the addressing mechanisms defined in section 6.8 of XEP-0060.
+     * using any of the addressing mechanisms defined in section 4.6 of XEP-0060.
      *
      * @param expectedNodeId The ID of the node that is expected to be represented by the item
      * @param item a service discovery item
      * @param message error message used when the assertion fails.
-     * @see <a href="https://xmpp.org/extensions/xep-0060.html#addressing">XEP-0060 Publish-Subscribe, Section 6.8 Addressing</a>
+     * @see <a href="https://xmpp.org/extensions/xep-0060.html#addressing">XEP-0060 Publish-Subscribe, Section 4.6 Addressing</a>
      */
     public static void assertItemRepresentsNode(final String expectedNodeId, final DiscoverItems.Item item, final String message)
     {
