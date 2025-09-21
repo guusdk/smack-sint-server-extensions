@@ -7,7 +7,7 @@ permissions:
 
 jobs:
   build-java:
-    name: Build
+    name: Build the test suite
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -30,8 +30,9 @@ jobs:
           name: smack-tests
           path: target/smack-sint-server-extensions-*-jar-with-dependencies.jar
           retention-days: 1
-  test-java:
-    name: Test
+
+  test-java-admin:
+    name: Test the suite against an XMPP server (using admin account)
     runs-on: ubuntu-latest
     needs: build-java
     steps:
@@ -63,23 +64,143 @@ jobs:
           -Dsinttest.adminAccountPassword=admin \
           -Dsinttest.enabledConnections=tcp \
           -Dsinttest.dnsResolver=javax \
-          -Dsinttest.enabledTests="VCardTempIntegrationTest" \
+          -Dsinttest.enabledTests="VCardTempIntegrationTest,PingIntegrationTest" \
           -Dsinttest.testRunResultProcessors=org.igniterealtime.smack.inttest.util.StdOutTestRunResultProcessor,org.igniterealtime.smack.inttest.util.JUnitXmlTestRunResultProcessor \
           -Dsinttest.debugger=org.igniterealtime.smack.inttest.util.ModifiedStandardSinttestDebuggerMetaFactory \
-          -DlogDir=./target/logs \
+          -DlogDir=./logs \
           -jar $JARFILE
         shell: bash
       - name: Expose XMPP debug logs
         uses: actions/upload-artifact@v4
         if: always() # always run even if the previous step fails
         with:
-          name: XMPP debug logs
+          name: XMPP debug logs (for test ID 'provisioning-admin')
           path: logs/*
       - name: Expose Openfire logs
         uses: actions/upload-artifact@v4
         if: always() # always run even if the previous step fails
         with:
-          name: Openfire server logs
+          name: Openfire server logs (for test ID 'provisioning-admin')
+          path: openfire/logs/*
+      - name: Publish Test Report
+        uses: mikepenz/action-junit-report@v4
+        if: always() # always run even if the previous step fails
+        with:
+          report_paths: '**/test-results.xml'
+          suite_regex: '*'
+          include_passed: true
+          detailed_summary: true
+  test-java-accounts:
+    name: Test the suite against an XMPP server (using explicit accounts)
+    runs-on: ubuntu-latest
+    needs: build-java
+    steps:
+      - name: Download the built artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: smack-tests
+          path: .
+      - name: Start a test server (Openfire daily)
+        uses: igniterealtime/launch-openfire-action@main
+        with:
+          daily: 'true'
+      - name: Run the tests
+        run: |
+          # Get the jar file by globbing on the version
+          JAR_MATCHES=(smack-sint-server-extensions-*-jar-with-dependencies.jar)
+          JARFILE=${JAR_MATCHES[0]}
+
+          # Run the tests the same way the action does
+          # Borrowing from:
+          #  - https://github.com/XMPP-Interop-Testing/xmpp-interop-tests-action/blob/main/action.yml
+          #  - https://github.com/igniterealtime/Openfire/blob/ddf144c4ff3b0f753c4087c1e197dfc2bab324a9/.github/workflows/continuous-integration-workflow.yml#L199-L205
+          java \
+          -Dsinttest.service="example.org" \
+          -Dsinttest.host="127.0.0.1" \
+          -Dsinttest.securityMode=disabled \
+          -Dsinttest.replyTimeout=5000 \
+          -Dsinttest.accountOneUsername="jane" \
+          -Dsinttest.accountOnePassword="secret" \
+          -Dsinttest.accountTwoUsername="juan" \
+          -Dsinttest.accountTwoPassword="secret" \
+          -Dsinttest.accountThreeUsername="john" \
+          -Dsinttest.accountThreePassword="secret" \
+          -Dsinttest.enabledConnections=tcp \
+          -Dsinttest.dnsResolver=javax \
+          -Dsinttest.enabledTests="VCardTempIntegrationTest,PingIntegrationTest" \
+          -Dsinttest.testRunResultProcessors=org.igniterealtime.smack.inttest.util.StdOutTestRunResultProcessor,org.igniterealtime.smack.inttest.util.JUnitXmlTestRunResultProcessor \
+          -Dsinttest.debugger=org.igniterealtime.smack.inttest.util.ModifiedStandardSinttestDebuggerMetaFactory \
+          -DlogDir=./logs \
+          -jar $JARFILE
+        shell: bash
+      - name: Expose XMPP debug logs
+        uses: actions/upload-artifact@v4
+        if: always() # always run even if the previous step fails
+        with:
+          name: XMPP debug logs (for test ID 'provisioning-static-accounts')
+          path: logs/*
+      - name: Expose Openfire logs
+        uses: actions/upload-artifact@v4
+        if: always() # always run even if the previous step fails
+        with:
+          name: Openfire server logs (for test ID 'provisioning-static-accounts')
+          path: openfire/logs/*
+      - name: Publish Test Report
+        uses: mikepenz/action-junit-report@v4
+        if: always() # always run even if the previous step fails
+        with:
+          report_paths: '**/test-results.xml'
+          suite_regex: '*'
+          include_passed: true
+          detailed_summary: true
+  test-java-ibr:
+    name: Test the suite against an XMPP server (using XEP-0077 In-Band Registration)
+    runs-on: ubuntu-latest
+    needs: build-java
+    steps:
+      - name: Download the built artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: smack-tests
+          path: .
+      - name: Start a test server (Openfire daily)
+        uses: igniterealtime/launch-openfire-action@main
+        with:
+          daily: 'true'
+      - name: Run the tests
+        run: |
+          # Get the jar file by globbing on the version
+          JAR_MATCHES=(smack-sint-server-extensions-*-jar-with-dependencies.jar)
+          JARFILE=${JAR_MATCHES[0]}
+
+          # Run the tests the same way the action does
+          # Borrowing from:
+          #  - https://github.com/XMPP-Interop-Testing/xmpp-interop-tests-action/blob/main/action.yml
+          #  - https://github.com/igniterealtime/Openfire/blob/ddf144c4ff3b0f753c4087c1e197dfc2bab324a9/.github/workflows/continuous-integration-workflow.yml#L199-L205
+          java \
+          -Dsinttest.service="example.org" \
+          -Dsinttest.host="127.0.0.1" \
+          -Dsinttest.securityMode=disabled \
+          -Dsinttest.replyTimeout=5000 \
+          -Dsinttest.enabledConnections=tcp \
+          -Dsinttest.dnsResolver=javax \
+          -Dsinttest.enabledTests="VCardTempIntegrationTest,PingIntegrationTest" \
+          -Dsinttest.testRunResultProcessors=org.igniterealtime.smack.inttest.util.StdOutTestRunResultProcessor,org.igniterealtime.smack.inttest.util.JUnitXmlTestRunResultProcessor \
+          -Dsinttest.debugger=org.igniterealtime.smack.inttest.util.ModifiedStandardSinttestDebuggerMetaFactory \
+          -DlogDir=./logs \
+          -jar $JARFILE
+        shell: bash
+      - name: Expose XMPP debug logs
+        uses: actions/upload-artifact@v4
+        if: always() # always run even if the previous step fails
+        with:
+          name: XMPP debug logs (for test ID 'provisioning-ibr')
+          path: logs/*
+      - name: Expose Openfire logs
+        uses: actions/upload-artifact@v4
+        if: always() # always run even if the previous step fails
+        with:
+          name: Openfire server logs (for test ID 'provisioning-ibr')
           path: openfire/logs/*
       - name: Publish Test Report
         uses: mikepenz/action-junit-report@v4
@@ -91,7 +212,7 @@ jobs:
           detailed_summary: true
 
   build-and-test-docker:
-    name: Build Docker image
+    name: Build & Test the Docker image
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -116,21 +237,28 @@ jobs:
             --timeout=5000 \
             --adminAccountUsername=admin \
             --adminAccountPassword=admin \
-            --enabledTests="VCardTempIntegrationTest"
+            --enabledTests="VCardTempIntegrationTest,PingIntegrationTest"
         shell: bash
-
       - name: Expose XMPP debug logs
         uses: actions/upload-artifact@v4
         if: always() # always run even if the previous step fails
         with:
-          name: XMPP debug logs from Docker
+          name: XMPP debug logs from Docker (for test ID 'provisioning-admin')
           path: xmpplogs/*
       - name: Expose Openfire logs
         uses: actions/upload-artifact@v4
         if: always() # always run even if the previous step fails
         with:
-          name: Openfire server logs from Docker test
+          name: Openfire server logs from Docker test (for test ID 'provisioning-admin')
           path: openfire/logs/*
+      - name: Publish Test Report
+        uses: mikepenz/action-junit-report@v4
+        if: always() # always run even if the previous step fails
+        with:
+          report_paths: '**/test-results.xml'
+          suite_regex: '*'
+          include_passed: true
+          detailed_summary: true
 
   build-podman:
     name: Build with Podman
