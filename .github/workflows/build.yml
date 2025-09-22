@@ -210,6 +210,74 @@ jobs:
           suite_regex: '*'
           include_passed: true
           detailed_summary: true
+  test-java-fail-on-impossible-test:
+    name: Test the 'fail-on-impossible-test' configuration option
+    runs-on: ubuntu-latest
+    needs: build-java
+    steps:
+      - name: Download the built artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: smack-tests
+          path: .
+      - name: Start a test server (Openfire daily)
+        uses: igniterealtime/launch-openfire-action@main
+        with:
+          daily: 'true'
+      - name: Run the tests
+        run: |
+          # Keep running even if the command fails (which is expected in this particular test)
+          set +e
+          # This depends on Openfire not supporting XEP-0215 out of the box.
+
+          # Get the jar file by globbing on the version
+          JAR_MATCHES=(smack-sint-server-extensions-*-jar-with-dependencies.jar)
+          JARFILE=${JAR_MATCHES[0]}
+
+          # Run the tests the same way the action does
+          # Borrowing from:
+          #  - https://github.com/XMPP-Interop-Testing/xmpp-interop-tests-action/blob/main/action.yml
+          #  - https://github.com/igniterealtime/Openfire/blob/ddf144c4ff3b0f753c4087c1e197dfc2bab324a9/.github/workflows/continuous-integration-workflow.yml#L199-L205
+          java \
+          -Dsinttest.service="example.org" \
+          -Dsinttest.host="127.0.0.1" \
+          -Dsinttest.securityMode=disabled \
+          -Dsinttest.replyTimeout=5000 \
+          -Dsinttest.adminAccountUsername=admin \
+          -Dsinttest.adminAccountPassword=admin \
+          -Dsinttest.enabledConnections=tcp \
+          -Dsinttest.dnsResolver=javax \
+          -Dsinttest.enabledSpecifications="XEP-0215,XEP-0199" \
+          -Dsinttest.failOnImpossibleTest=true \
+          -Dsinttest.testRunResultProcessors=org.igniterealtime.smack.inttest.util.StdOutTestRunResultProcessor,org.igniterealtime.smack.inttest.util.JUnitXmlTestRunResultProcessor \
+          -Dsinttest.debugger=org.igniterealtime.smack.inttest.util.ModifiedStandardSinttestDebuggerMetaFactory \
+          -DlogDir=./logs \
+          -jar $JARFILE
+
+          RESULT=$?
+          # Invert the exit code:
+          # If RESULT == 0 (success), exit with 1 (fail workflow).
+          # If RESULT != 0 (failure), exit with 0 (pass workflow).
+          if [ $RESULT -eq 0 ]; then
+            echo "❌ Command succeeded, but failure was expected!"
+            exit 1
+          else
+            echo "✅ Command failed as expected."
+            exit 0
+          fi
+        shell: bash
+      - name: Expose XMPP debug logs
+        uses: actions/upload-artifact@v4
+        if: always() # always run even if the previous step fails
+        with:
+          name: XMPP debug logs (for 'fail-on-impossible-test')
+          path: logs/*
+      - name: Expose Openfire logs
+        uses: actions/upload-artifact@v4
+        if: always() # always run even if the previous step fails
+        with:
+          name: Openfire server logs (for 'fail-on-impossible-test')
+          path: openfire/logs/*
 
   build-and-test-docker:
     name: Build & Test the Docker image
