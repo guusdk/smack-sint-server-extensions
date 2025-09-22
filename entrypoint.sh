@@ -3,6 +3,7 @@
 DOMAIN="example.org"
 HOST="127.0.0.1"
 TIMEOUT=5000
+FAILONIMPOSSIBLETEST=false
 
 usage() {
   cat <<EOF
@@ -24,6 +25,7 @@ Usage:
     --enabledTests=ENABLEDTESTS                  Comma-separated list of the only tests to run, e.g. EntityCapsTest,SoftwareInfoIntegrationTest
     --enabledSpecifications=ENABLEDSPECIFICATIONS
                                                  Comma-separated list of the only specifications to run, e.g. XEP-0030,XEP-0199
+    --failOnImpossibleTest                       If set to 'true', fails the test run if any configured tests were impossible to execute. (default: 'false')
     --help                                       This help message
 EOF
 }
@@ -89,6 +91,9 @@ while [ $# -gt 0 ]; do
     --enabledSpecifications*)
       if [[ "$1" != *=* ]]; then shift; fi
       ENABLEDSPECIFICATIONS="${1#*=}"
+      ;;
+    --failOnImpossibleTest)
+      FAILONIMPOSSIBLETEST=true
       ;;
     --help|-h)
       usage
@@ -173,6 +178,9 @@ if [ "$ENABLEDSPECIFICATIONS" != "" ]; then
 fi
 if [ "$ENABLEDTESTS" != "" ]; then
     JAVACMD+=("-Dsinttest.enabledTests=$ENABLEDTESTS")
+fi
+if [ "$FAILONIMPOSSIBLETEST" = true ]; then
+    JAVACMD+=("-Dsinttest.failOnImpossibleTest=true")
 fi
 JAVACMD+=("-Dsinttest.testRunResultProcessors=org.igniterealtime.smack.inttest.util.StdOutTestRunResultProcessor,org.igniterealtime.smack.inttest.util.JUnitXmlTestRunResultProcessor")
 # JAVACMD+=("-Dsinttest.debugger=standard,dir=./logs,console=off")
