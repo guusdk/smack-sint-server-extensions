@@ -71,3 +71,10 @@ setup() {
   assert_output --partial "Running: java -Dsinttest"
   assert_output --partial "-Dsinttest.service=test.example"
 }
+
+@test "successfully applies 'failOnImpossibleTest'" {
+  run "$SCRIPT" --failOnImpossibleTest
+  assert_success
+  assert_output --partial "Running: java -Dsinttest"
+  assert_output --partial "-Dsinttest.failOnImpossibleTest=true"
+}
