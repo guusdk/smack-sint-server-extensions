@@ -27,7 +27,7 @@ java -Dsinttest.adminAccountUsername=admin \
      smack-sint-server-extensions-1.0.0-jar-with-dependencies.jar
 ```
 
-This example demonstrates one possible way to provision accounts. Other configuration methods are also available, and you can explore the full set of options in the sections below.
+This example demonstrates one possible way to provision accounts. Other configuration methods are also available, and you can explore the full set of options [on our website](https://xmpp-interop-testing.github.io/).
 
 ### From source code, using an IDE
 
