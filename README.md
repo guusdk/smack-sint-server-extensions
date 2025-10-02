@@ -27,6 +27,8 @@ java -Dsinttest.adminAccountUsername=admin \
      smack-sint-server-extensions-1.0.0-jar-with-dependencies.jar
 ```
 
+This example demonstrates one possible way to provision accounts. Other configuration methods are also available, and you can explore the full set of options in the sections below.
+
 ### From source code, using an IDE
 
 This is an example Run/Debug configuration (which you can use in Intellij):
