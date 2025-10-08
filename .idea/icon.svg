@@ -1,0 +1,38 @@
+<svg width="600" height="600" xmlns="http://www.w3.org/2000/svg">
+
+  <!-- Chain 1 (Purple) right half -->
+  <rect x="120" y="70" width="360" height="200" rx="100" 
+        style="stroke:#FFFFFF; stroke-width:60; fill-opacity:0"
+        transform="rotate(180, 300, 300)"
+        clip-path="rect(0% 50% 100% 0%) stroke-box"/>
+  <rect x="120" y="70" width="360" height="200" rx="100" 
+        style="stroke:#1b3967; stroke-width:40; fill-opacity:0"
+        transform="rotate(180, 300, 300)"
+        clip-path="rect(0% 50% 100% 0%) stroke-box"/>
+
+  <!-- Chain 2 (Green) -->
+  <rect x="120" y="70" width="360" height="200" rx="100" 
+        style="stroke:#FFFFFF; stroke-width:60; fill-opacity:0"
+        transform="rotate(60, 300, 300)"/>
+  <rect x="120" y="70" width="360" height="200" rx="100" 
+        style="stroke:#439639; stroke-width:40; fill-opacity:0"
+        transform="rotate(60, 300, 300)"/>
+
+  <!-- Chain 2 (Orange) -->
+  <rect x="120" y="70" width="360" height="200" rx="100" 
+        style="stroke:#FFFFFF; stroke-width:60; fill-opacity:0"
+        transform="rotate(300, 300, 300)"/>
+  <rect x="120" y="70" width="360" height="200" rx="100" 
+        style="stroke:#d9541e; stroke-width:40; fill-opacity:0"
+        transform="rotate(300, 300, 300)"/>
+
+  <!-- Chain 1 (Purple) left half -->
+  <rect x="120" y="70" width="360" height="200" rx="100" 
+        style="stroke:#FFFFFF; stroke-width:60; fill-opacity:0"
+        transform="rotate(180, 300, 300)"
+        clip-path="rect(0% 100% 100% 50%) stroke-box"/>
+  <rect x="120" y="70" width="360" height="200" rx="100" 
+        style="stroke:#002b5c; stroke-width:40; fill-opacity:0"
+        transform="rotate(180, 300, 300)"
+        clip-path="rect(0% 100% 100% 50%) stroke-box"/>
+</svg>
