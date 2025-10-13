@@ -4,8 +4,6 @@ DOMAIN="example.org"
 HOST="127.0.0.1"
 TIMEOUT=5000
 FAILONIMPOSSIBLETEST=false
-# Tests provided by Smack, that only test client behavior. Do not execute these to verify server behavior.
-DISABLEDCLIENTTESTS="AdHocCommandIntegrationTest,FileTransferIntegrationTest,GeolocationIntegrationTest,MoodIntegrationTest,UserTuneIntegrationTest,VersionIntegrationTest,PingIntegrationTest,SoftwareInfoIntegrationTest"
 
 usage() {
   cat <<EOF
@@ -172,11 +170,8 @@ JAVACMD+=("-Dsinttest.dnsResolver=javax")
 if [ "$DISABLEDSPECIFICATIONS" != "" ]; then
     JAVACMD+=("-Dsinttest.disabledSpecifications=$DISABLEDSPECIFICATIONS")
 fi
-
 if [ "$DISABLEDTESTS" != "" ]; then
-    JAVACMD+=("-Dsinttest.disabledTests=$DISABLEDCLIENTTESTS,$DISABLEDTESTS")
-else
-    JAVACMD+=("-Dsinttest.disabledTests=$DISABLEDCLIENTTESTS")
+    JAVACMD+=("-Dsinttest.disabledTests=$DISABLEDTESTS")
 fi
 if [ "$ENABLEDSPECIFICATIONS" != "" ]; then
     JAVACMD+=("-Dsinttest.enabledSpecifications=$ENABLEDSPECIFICATIONS")
