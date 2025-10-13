@@ -57,7 +57,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * @see <a href="https://xmpp.org/extensions/xep-0133.html">XEP-0133: Service Administration</a>
  */
 @SpecificationReference(document = "XEP-0133", version = "1.3.1")
-public class AdHocCommandIntegrationTest extends AbstractAdHocCommandIntegrationTest {
+public class ServiceAdministrationIntegrationTest extends AbstractAdHocCommandIntegrationTest {
 
     private static final String ADD_A_USER = "http://jabber.org/protocol/admin#add-user"; //4.1
     private static final String SEND_ANNOUNCEMENT_TO_ONLINE_USERS = "http://jabber.org/protocol/admin#announce"; //4.23
@@ -90,7 +90,7 @@ public class AdHocCommandIntegrationTest extends AbstractAdHocCommandIntegration
     private static final String RESTART_SERVICE = "http://jabber.org/protocol/admin#restart"; //4.30
     private static final String SHUTDOWN_SERVICE = "http://jabber.org/protocol/admin#shutdown"; //4.31
 
-    public AdHocCommandIntegrationTest(SmackIntegrationTestEnvironment environment)
+    public ServiceAdministrationIntegrationTest(SmackIntegrationTestEnvironment environment)
         throws InvocationTargetException, InstantiationException, IllegalAccessException, SmackException, IOException, XMPPException, InterruptedException, TestNotPossibleException {
         super(environment);
     }
