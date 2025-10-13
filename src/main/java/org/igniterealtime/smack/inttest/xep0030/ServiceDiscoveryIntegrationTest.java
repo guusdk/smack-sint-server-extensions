@@ -459,7 +459,7 @@ public class ServiceDiscoveryIntegrationTest extends AbstractSmackIntegrationTes
     }
 
     /**
-     * Retrieves all service discovery items in a tree, including the "Node Hierarchy" as defined in XEP-0030 section 4.2.
+     * Retrieves all accessible service discovery items in a tree, including the "Node Hierarchy" as defined in XEP-0030 section 4.2.
      */
     private void populate(final TreeNode parent, final ServiceDiscoveryManager manager, final Coordinates coordinates, final Set<Coordinates> uniques) throws XMPPException.XMPPErrorException, SmackException.NotConnectedException, SmackException.NoResponseException, InterruptedException
     {
@@ -468,11 +468,23 @@ public class ServiceDiscoveryIntegrationTest extends AbstractSmackIntegrationTes
             return;
         }
 
-        final DiscoverInfo discoveredInfo = manager.discoverInfo(coordinates.getJid(), coordinates.getNode());
+        final DiscoverInfo discoveredInfo;
+        try {
+            discoveredInfo = manager.discoverInfo(coordinates.getJid(), coordinates.getNode());
+        } catch (XMPPException.XMPPErrorException e) {
+            // Unable to crawl this particular node.
+            return;
+        }
         final TreeNode treeNode = new TreeNode(parent, coordinates, discoveredInfo);
         parent.getChildren().add(treeNode);
 
-        final DiscoverItems discoveredItems = manager.discoverItems(coordinates.getJid(), coordinates.getNode());
+        final DiscoverItems discoveredItems;
+        try {
+            discoveredItems = manager.discoverItems(coordinates.getJid(), coordinates.getNode());
+        } catch (XMPPException.XMPPErrorException e) {
+            // Unable to crawl this particular node.
+            return;
+        }
         if (!discoveredItems.getItems().isEmpty()) {
             for (final DiscoverItems.Item item : discoveredItems.getItems()) {
                 final Coordinates childCoordinates = Coordinates.of(item);
