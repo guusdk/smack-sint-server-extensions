@@ -64,7 +64,7 @@ jobs:
           -Dsinttest.adminAccountPassword=admin \
           -Dsinttest.enabledConnections=tcp \
           -Dsinttest.dnsResolver=javax \
-          -Dsinttest.enabledTests="VCardTempIntegrationTest,PingIntegrationTest" \
+          -Dsinttest.enabledTests="VCardTempIntegrationTest,PingServerIntegrationTest" \
           -Dsinttest.testRunResultProcessors=org.igniterealtime.smack.inttest.util.StdOutTestRunResultProcessor,org.igniterealtime.smack.inttest.util.JUnitXmlTestRunResultProcessor \
           -Dsinttest.debugger=org.igniterealtime.smack.inttest.util.ModifiedStandardSinttestDebuggerMetaFactory \
           -DlogDir=./logs \
@@ -127,7 +127,7 @@ jobs:
           -Dsinttest.accountThreePassword="secret" \
           -Dsinttest.enabledConnections=tcp \
           -Dsinttest.dnsResolver=javax \
-          -Dsinttest.enabledTests="VCardTempIntegrationTest,PingIntegrationTest" \
+          -Dsinttest.enabledTests="VCardTempIntegrationTest,PingServerIntegrationTest" \
           -Dsinttest.testRunResultProcessors=org.igniterealtime.smack.inttest.util.StdOutTestRunResultProcessor,org.igniterealtime.smack.inttest.util.JUnitXmlTestRunResultProcessor \
           -Dsinttest.debugger=org.igniterealtime.smack.inttest.util.ModifiedStandardSinttestDebuggerMetaFactory \
           -DlogDir=./logs \
@@ -184,7 +184,7 @@ jobs:
           -Dsinttest.replyTimeout=5000 \
           -Dsinttest.enabledConnections=tcp \
           -Dsinttest.dnsResolver=javax \
-          -Dsinttest.enabledTests="VCardTempIntegrationTest,PingIntegrationTest" \
+          -Dsinttest.enabledTests="VCardTempIntegrationTest,PingServerIntegrationTest" \
           -Dsinttest.testRunResultProcessors=org.igniterealtime.smack.inttest.util.StdOutTestRunResultProcessor,org.igniterealtime.smack.inttest.util.JUnitXmlTestRunResultProcessor \
           -Dsinttest.debugger=org.igniterealtime.smack.inttest.util.ModifiedStandardSinttestDebuggerMetaFactory \
           -DlogDir=./logs \
@@ -305,7 +305,7 @@ jobs:
             --timeout=5000 \
             --adminAccountUsername=admin \
             --adminAccountPassword=admin \
-            --enabledTests="VCardTempIntegrationTest,PingIntegrationTest"
+            --enabledTests="VCardTempIntegrationTest,PingServerIntegrationTest"
         shell: bash
       - name: Expose XMPP debug logs
         uses: actions/upload-artifact@v4

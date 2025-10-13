@@ -35,26 +35,52 @@
                 </configuration>
             </plugin>
             <plugin>
-                <artifactId>maven-assembly-plugin</artifactId>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.5.0</version>
                 <executions>
                     <execution>
-                        <id>make-assembly</id>
                         <phase>package</phase>
                         <goals>
-                            <goal>single</goal>
+                            <goal>shade</goal>
                         </goals>
+                        <configuration>
+                            <shadedArtifactAttached>true</shadedArtifactAttached>
+                            <shadedClassifierName>jar-with-dependencies</shadedClassifierName>
+                            <filters>
+                                <filter>
+                                    <artifact>org.igniterealtime.smack:smack-integration-test</artifact>
+                                    <excludes>
+                                        <!-- Exclude Smack tests that do not verify server behavior. See https://github.com/XMPP-Interop-Testing/smack-sint-server-extensions/issues/153 -->
+                                        <exclude>org/jivesoftware/smackx/commands/**</exclude>
+                                        <exclude>org/jivesoftware/smackx/filetransfer/**</exclude>
+                                        <exclude>org/jivesoftware/smackx/geolocation/**</exclude>
+                                        <exclude>org/jivesoftware/smackx/mood/**</exclude>
+                                        <exclude>org/jivesoftware/smackx/usertune/**</exclude>
+                                        <exclude>org/jivesoftware/smackx/iqversion/**</exclude>
+                                        <exclude>org/jivesoftware/smackx/ping/**</exclude>
+                                        <exclude>org/jivesoftware/smackx/softwareinfo/**</exclude>
+                                    </excludes>
+                                </filter>
+                                <filter>
+                                    <artifact>*:*</artifact>
+                                    <excludes>
+                                        <!-- Exclude signature metadata, as these will prevent the resulting 'uber jar' from being executed. -->
+                                        <exclude>META-INF/*.SF</exclude>
+                                        <exclude>META-INF/*.DSA</exclude>
+                                        <exclude>META-INF/*.RSA</exclude>
+                                    </excludes>
+                                </filter>
+                            </filters>
+                            <transformers>
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                    <mainClass>org.igniterealtime.smack.inttest.SmackIntegrationTestFramework</mainClass>
+                                </transformer>
+                            </transformers>
+                            <createDependencyReducedPom>false</createDependencyReducedPom>
+                        </configuration>
                     </execution>
                 </executions>
-                <configuration>
-                    <archive>
-                        <manifest>
-                            <mainClass>org.igniterealtime.smack.inttest.SmackIntegrationTestFramework</mainClass>
-                        </manifest>
-                    </archive>
-                    <descriptorRefs>
-                        <descriptorRef>jar-with-dependencies</descriptorRef>
-                    </descriptorRefs>
-                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
