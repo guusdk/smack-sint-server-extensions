@@ -52,14 +52,15 @@
                                     <artifact>org.igniterealtime.smack:smack-integration-test</artifact>
                                     <excludes>
                                         <!-- Exclude Smack tests that do not verify server behavior. See https://github.com/XMPP-Interop-Testing/smack-sint-server-extensions/issues/153 -->
+                                        <exclude>org/jivesoftware/smackx/chatstate/**</exclude>
                                         <exclude>org/jivesoftware/smackx/commands/**</exclude>
                                         <exclude>org/jivesoftware/smackx/filetransfer/**</exclude>
                                         <exclude>org/jivesoftware/smackx/geolocation/**</exclude>
-                                        <exclude>org/jivesoftware/smackx/mood/**</exclude>
-                                        <exclude>org/jivesoftware/smackx/usertune/**</exclude>
                                         <exclude>org/jivesoftware/smackx/iqversion/**</exclude>
+                                        <exclude>org/jivesoftware/smackx/mood/**</exclude>
                                         <exclude>org/jivesoftware/smackx/ping/**</exclude>
                                         <exclude>org/jivesoftware/smackx/softwareinfo/**</exclude>
+                                        <exclude>org/jivesoftware/smackx/usertune/**</exclude>
                                     </excludes>
                                 </filter>
                                 <filter>
