@@ -74,7 +74,7 @@ public class PubSubSection5_5_IntegrationTest extends AbstractSmackIntegrationTe
             config.setNodeType(NodeType.leaf);
             node = (LeafNode) pubSubManagerOne.createNode(nodeId, config);
         } catch (Exception e) {
-            throw new TestNotPossibleException("Unable to create a Leaf Node.", e);
+            throw new TestNotPossibleException("PubSub service does not allow test user to create leaf nodes.", e);
         }
         try {
             node.publish(new PayloadItem<>(itemId, GeoLocation.builder().setDescription(StringUtils.randomString(5)).build()));
@@ -84,7 +84,7 @@ public class PubSubSection5_5_IntegrationTest extends AbstractSmackIntegrationTe
             } catch (XMPPException.XMPPErrorException e1) {
                 LOGGER.log(Level.WARNING, "Unable to delete node that was created in the test fixture. Node ID: " + nodeId, e1);
             }
-            throw new TestNotPossibleException("Unable to publish an Item to a Leaf Node.", e);
+            throw new TestNotPossibleException("PubSub service does not allow test user to publish an item to a leaf node.", e);
         }
         final ServiceDiscoveryManager serviceDiscoveryManager = ServiceDiscoveryManager.getInstanceFor(conOne);
 

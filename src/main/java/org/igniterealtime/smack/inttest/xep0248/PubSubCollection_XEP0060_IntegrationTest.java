@@ -91,7 +91,7 @@ public class PubSubCollection_XEP0060_IntegrationTest extends AbstractSmackInteg
             config.setNodeType(NodeType.collection);
             pubSubManagerOne.createNode(nodeId, config);
         } catch (Exception e) {
-            throw new TestNotPossibleException("Unable to create a Collection Node.", e);
+            throw new TestNotPossibleException("PubSub service does not allow test user to create collection nodes.", e);
         }
         final ServiceDiscoveryManager serviceDiscoveryManager = ServiceDiscoveryManager.getInstanceFor(conOne);
 
@@ -136,7 +136,7 @@ public class PubSubCollection_XEP0060_IntegrationTest extends AbstractSmackInteg
             configParent.setNodeType(NodeType.collection);
             pubSubManagerOne.createNode(nodeIdParent, configParent);
         } catch (Exception e) {
-            throw new TestNotPossibleException("Unable to create a node hierarchy.", e);
+            throw new TestNotPossibleException("PubSub service does not allow test user to create a node hierarchy.", e);
         }
 
         try {
@@ -150,7 +150,7 @@ public class PubSubCollection_XEP0060_IntegrationTest extends AbstractSmackInteg
             } catch (XMPPException.XMPPErrorException e1) {
                 LOGGER.log(Level.WARNING, "Unable to delete collection node that was created in the test fixture. Node ID: " + nodeIdParent, e1);
             }
-            throw new TestNotPossibleException("Unable to create a node hierarchy.", e);
+            throw new TestNotPossibleException("PubSub service does not allow test user to create a node hierarchy.", e);
         }
         final ServiceDiscoveryManager serviceDiscoveryManager = ServiceDiscoveryManager.getInstanceFor(conOne);
 
@@ -200,7 +200,7 @@ public class PubSubCollection_XEP0060_IntegrationTest extends AbstractSmackInteg
             configParent.setNodeType(NodeType.collection);
             pubSubManagerOne.createNode(nodeIdParent, configParent);
         } catch (Exception e) {
-            throw new TestNotPossibleException("Unable to create a node hierarchy.", e);
+            throw new TestNotPossibleException("PubSub service does not allow test user to create a node hierarchy.", e);
         }
 
         try {
@@ -214,7 +214,7 @@ public class PubSubCollection_XEP0060_IntegrationTest extends AbstractSmackInteg
             } catch (XMPPException.XMPPErrorException e1) {
                 LOGGER.log(Level.WARNING, "Unable to delete collection node that was created in the test fixture. Node ID: " + nodeIdParent, e1);
             }
-            throw new TestNotPossibleException("Unable to create a node hierarchy.", e);
+            throw new TestNotPossibleException("PubSub service does not allow test user to create a node hierarchy.", e);
         }
         final ServiceDiscoveryManager serviceDiscoveryManager = ServiceDiscoveryManager.getInstanceFor(conOne);
 
@@ -263,7 +263,7 @@ public class PubSubCollection_XEP0060_IntegrationTest extends AbstractSmackInteg
             configParent.setNodeType(NodeType.collection);
             pubSubManagerOne.createNode(nodeIdParent, configParent);
         } catch (Exception e) {
-            throw new TestNotPossibleException("Unable to create a node hierarchy.", e);
+            throw new TestNotPossibleException("PubSub service does not allow test user to create a node hierarchy.", e);
         }
 
         try {
@@ -277,7 +277,7 @@ public class PubSubCollection_XEP0060_IntegrationTest extends AbstractSmackInteg
             } catch (XMPPException.XMPPErrorException e1) {
                 LOGGER.log(Level.WARNING, "Unable to delete collection node that was created in the test fixture. Node ID: " + nodeIdParent, e1);
             }
-            throw new TestNotPossibleException("Unable to create a node hierarchy.", e);
+            throw new TestNotPossibleException("PubSub service does not allow test user to create a node hierarchy.", e);
         }
 
         try {
@@ -288,7 +288,7 @@ public class PubSubCollection_XEP0060_IntegrationTest extends AbstractSmackInteg
             } catch (XMPPException.XMPPErrorException e1) {
                 LOGGER.log(Level.WARNING, "Unable to delete node that was created in the test fixture. Node ID: " + nodeIdChild, e1);
             }
-            throw new TestNotPossibleException("Unable to publish an Item to a Leaf Node.", e);
+            throw new TestNotPossibleException("PubSub service does not allow test user to publish an item to a leaf node.", e);
         }
         final ServiceDiscoveryManager serviceDiscoveryManager = ServiceDiscoveryManager.getInstanceFor(conOne);
 

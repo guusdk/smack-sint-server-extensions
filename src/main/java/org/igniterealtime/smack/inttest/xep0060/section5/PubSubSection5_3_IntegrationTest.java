@@ -72,7 +72,7 @@ public class PubSubSection5_3_IntegrationTest extends AbstractSmackIntegrationTe
             pubSubManagerOne.createNode(nodeId, config);
         } catch (Exception e) {
             e.printStackTrace();
-            throw new TestNotPossibleException("Unable to create a Leaf Node.", e);
+            throw new TestNotPossibleException("PubSub service does not allow test user to create leaf nodes.", e);
         }
         final ServiceDiscoveryManager serviceDiscoveryManager = ServiceDiscoveryManager.getInstanceFor(conOne);
 
