@@ -42,7 +42,7 @@ import static org.junit.jupiter.api.Assertions.*;
  *
  * @see <a href="https://xmpp.org/extensions/xep-0045.html#modifyowner">XEP-0045 Section 10.5</a>
  */
-@SpecificationReference(document = "XEP-0045", version = "1.35.1")
+@SpecificationReference(document = "XEP-0045", version = "1.35.2")
 public class MultiUserChatOwnerOwnerListIntegrationTest extends AbstractMultiUserChatIntegrationTest
 {
     public MultiUserChatOwnerOwnerListIntegrationTest(SmackIntegrationTestEnvironment environment)

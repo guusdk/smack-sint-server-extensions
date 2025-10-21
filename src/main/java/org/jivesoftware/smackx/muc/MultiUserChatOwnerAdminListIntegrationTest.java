@@ -41,7 +41,7 @@ import static org.junit.jupiter.api.Assertions.*;
  *
  * @see <a href="https://xmpp.org/extensions/xep-0045.html#modifyadmin">XEP-0045 Section 10.8</a>
  */
-@SpecificationReference(document = "XEP-0045", version = "1.35.1")
+@SpecificationReference(document = "XEP-0045", version = "1.35.2")
 public class MultiUserChatOwnerAdminListIntegrationTest extends AbstractMultiUserChatIntegrationTest
 {
     public MultiUserChatOwnerAdminListIntegrationTest(SmackIntegrationTestEnvironment environment)
