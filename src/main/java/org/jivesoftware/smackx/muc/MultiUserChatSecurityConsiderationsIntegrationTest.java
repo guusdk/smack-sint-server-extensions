@@ -40,7 +40,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  *
  * @see <a href="https://xmpp.org/extensions/xep-0045.html#security">XEP-0045 Section 10</a>
  */
-@SpecificationReference(document = "XEP-0045", version = "1.35.1")
+@SpecificationReference(document = "XEP-0045", version = "1.35.2")
 public class MultiUserChatSecurityConsiderationsIntegrationTest extends AbstractMultiUserChatIntegrationTest
 {
     public MultiUserChatSecurityConsiderationsIntegrationTest(SmackIntegrationTestEnvironment environment) throws SmackException.NoResponseException, XMPPException.XMPPErrorException, SmackException.NotConnectedException, InterruptedException, TestNotPossibleException, MultiUserChatException.MucAlreadyJoinedException, MultiUserChatException.MissingMucCreationAcknowledgeException, MultiUserChatException.NotAMucServiceException, XmppStringprepException

@@ -48,7 +48,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  *
  * @see <a href="https://xmpp.org/extensions/xep-0045.html#privatemessage">XEP-0045 Section 7.5</a>
  */
-@SpecificationReference(document = "XEP-0045", version = "1.35.1")
+@SpecificationReference(document = "XEP-0045", version = "1.35.2")
 public class MultiUserChatOccupantPMIntegrationTest extends AbstractMultiUserChatIntegrationTest
 {
     public MultiUserChatOccupantPMIntegrationTest(SmackIntegrationTestEnvironment environment)

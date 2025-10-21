@@ -38,7 +38,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  *
  * @see <a href="https://xmpp.org/extensions/xep-0045.html#invite">XEP-0045 Section 7.8</a>
  */
-@SpecificationReference(document = "XEP-0045", version = "1.35.1")
+@SpecificationReference(document = "XEP-0045", version = "1.35.2")
 public class MultiUserChatInvitationIntegrationTest extends AbstractMultiUserChatIntegrationTest
 {
     public MultiUserChatInvitationIntegrationTest(SmackIntegrationTestEnvironment environment)
